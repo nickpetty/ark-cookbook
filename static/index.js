@@ -1,7 +1,7 @@
 
 function getItemList(){
 	var xmlhttp = new XMLHttpRequest();
-	var url = "http://192.168.1.234:8080/getItems";
+	var url = "/getItems";
 
 	xmlhttp.onreadystatechange = function() {
 	    if (this.readyState == 4 && this.status == 200) {
@@ -29,7 +29,7 @@ function giveItem(id=1, player=1, quanity=1, quality=1, forceBlueprint=0){
 	console.log(data);
 
 	var xmlhttp = new XMLHttpRequest();
-	var url = "http://192.168.1.234:8080/giveItem?" + data
+	var url = "/giveItem?" + data
 	xmlhttp.open("GET", url, true);
 	//xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send();
@@ -40,7 +40,7 @@ getItemList()
 
 function enableCheats(){
 	var xmlhttp = new XMLHttpRequest();
-	var url = "http://192.168.1.234:8080/enableCheats";
+	var url = "/enableCheats";
 	xmlhttp.open("GET", url, true);
 	xmlhttp.send();
 
