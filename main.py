@@ -84,12 +84,12 @@ def addPlayer():
 
 def launchConsole(): # Default = 'tab'
 	if platform.system() == "Darwin":
-		time.sleep(3)
 		cmd = """osascript -e 'tell application "System Events" to keystroke "`"'"""
 		os.system(cmd)
+		time.sleep(.5)
 	elif platform.system() == "Windows":
 		keyboard.write('`')
-	time.sleep(.5)
+	
 
 def enableCheats(password):
 	launchConsole()

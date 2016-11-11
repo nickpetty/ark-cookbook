@@ -1,13 +1,14 @@
-
+var itemList;
+var blueprintList;
 function getItemList(){
 	var xmlhttp = new XMLHttpRequest();
 	var url = "/getItems";
 
 	xmlhttp.onreadystatechange = function() {
 	    if (this.readyState == 4 && this.status == 200) {
-	        var myArr = JSON.parse(this.responseText);
+	        itemList = JSON.parse(this.responseText);
 	        //console.log(myArr['items'][0]["name"]);
-	        listItems(myArr);
+	        listItems(itemList);
 	    }
 	};
 	xmlhttp.open("GET", url, true);
@@ -44,4 +45,52 @@ function enableCheats(){
 	xmlhttp.open("GET", url, true);
 	xmlhttp.send();
 
+}
+
+function searchItem(){
+	var item = document.getElementById('item').value;
+	if (item == ""){
+		getItemList();
+	} else {
+		console.log(item);
+		var out = "";
+		var i;
+	    for(i = 0; i < itemList['items'].length; i++) {
+	    	if (itemList['items'][i]['name'].toLowerCase().indexOf(item) >= 0){
+	    		console.log('found it');
+	    		out += "<div onclick='giveItem(" + itemList['items'][i]['id'] + ")'>" + itemList['items'][i]["name"] +  "</div><p>";
+	    	}
+	    }
+	    if (out == ""){
+	    	getItemList()
+	    	return;
+	    }
+	    document.getElementById("items").innerHTML = '';
+	    document.getElementById("items").innerHTML = out;
+	}
+
+}
+
+function getBlueprintList(){
+	var xmlhttp = new XMLHttpRequest();
+	var url = "/getItems";
+
+	xmlhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	        blueprintList = JSON.parse(this.responseText);
+	        //console.log(myArr['items'][0]["name"]);
+	        listItems(blueprintList);
+	    }
+	};
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+
+	function listItems(arr) {
+	    var out = "";
+	    var i;
+	    for(i = 0; i < arr['blueprints'].length; i++) {
+	        out += "<div onclick='giveItem(" + arr['blueprints'][i]['id'] + ")'>" + arr['blueprints'][i]["name"] +  "</div><p>";
+	    }
+	    document.getElementById("blueprints").innerHTML = out;
+	}	
 }
