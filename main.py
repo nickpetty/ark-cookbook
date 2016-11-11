@@ -61,7 +61,8 @@ def getItems():
 
 @app.route('/giveItem')
 def giveItemRequest():
-	giveItem(request.args.get("id"));
+	giveItem( itemID=request.args.get("id"), quantity=request.args.get("quantity") );
+
 	return "", 200
 
 @app.route('/enableCheats')
@@ -99,17 +100,18 @@ def forceTame():
 	launchConsole()
 	keys('admincheat ForceTame')
 
-def giveItem(itemID, quanity=1, quality=1,  forceBlueprint=0, player=1):
+def giveItem(itemID, quantity=1, quality=1,  forceBlueprint=0, player=1):
 	#itemID = findItemID(itemName)
 	launchConsole()
 	if player == 1:
-		keys('admincheat GiveItemNum %s %s %s %s' % (itemID, quanity, quality, forceBlueprint))
+		keys('admincheat GiveItemNum %s %s %s %s' % (itemID, quantity, quality, forceBlueprint))
+		print 'colled'
 	else:
 		playerID = findPlayerID(player)
 		if playerID == 0:
 			print "Player not found"
 		else:
-			keys("admincheat giveitemnumtoplayer %s %s %s %s %s" % (playerID, itemID, quanity, quality, forceBlueprint))
+			keys("admincheat giveitemnumtoplayer %s %s %s %s %s" % (playerID, itemID, quantity, quality, forceBlueprint))
 
 
 # Program Functions #

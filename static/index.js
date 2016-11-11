@@ -24,15 +24,15 @@ function getItemList(){
 	}	
 }
 
-function giveItem(id=1, player=1, quanity=1, quality=1, forceBlueprint=0){
-	var data = "player=" + player + "&id=" + id + "&quanity=" + quanity + "&quality=" +
+function giveItem(id=1, player=1, quantity=1, quality=1, forceBlueprint=0){
+	console.log(document.getElementById('qty').value);
+	var data = "player=" + player + "&id=" + id + "&quantity=" + document.getElementById('qty').value + "&quality=" +
 	quality + "&forceBlueprint=" + forceBlueprint;
 	console.log(data);
 
 	var xmlhttp = new XMLHttpRequest();
 	var url = "/giveItem?" + data
 	xmlhttp.open("GET", url, true);
-	//xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xmlhttp.send();
 }
 
@@ -50,6 +50,8 @@ function enableCheats(){
 function searchItem(){
 	var item = document.getElementById('item').value;
 	if (item == ""){
+		document.getElementById("items").innerHTML = '';
+		document.getElementById("blueprints").innerHTML = '';
 		getItemList();
 	} else {
 		console.log(item);
@@ -62,12 +64,15 @@ function searchItem(){
 	    	}
 	    }
 	    if (out == ""){
-	    	getItemList()
+	    	document.getElementById("blueprints").innerHTML = '';
+	    	document.getElementById("items").innerHTML = '';
 	    	return;
 	    }
 	    document.getElementById("items").innerHTML = '';
+	    
 	    document.getElementById("items").innerHTML = out;
 	}
+	searchBlueprints();
 
 }
 
@@ -89,8 +94,48 @@ function getBlueprintList(){
 	    var out = "";
 	    var i;
 	    for(i = 0; i < arr['blueprints'].length; i++) {
-	        out += "<div onclick='giveItem(" + arr['blueprints'][i]['id'] + ")'>" + arr['blueprints'][i]["name"] +  "</div><p>";
+	        out += '<div onclick="giveItem("' + arr['blueprints'][i]['id'] + '")">' + arr['blueprints'][i]["name"] +  "</div><p>";
 	    }
 	    document.getElementById("blueprints").innerHTML = out;
 	}	
 }
+
+getBlueprintList()
+
+function searchBlueprints(){
+	var item = document.getElementById('item').value;
+	if (item == ""){
+		getItemList();
+	} else {
+		console.log(item);
+		var out = "";
+		var i;
+	    for(i = 0; i < itemList['blueprints'].length; i++) {
+	    	if (itemList['blueprints'][i]['name'].toLowerCase().indexOf(item) >= 0){
+	    		console.log('found it');
+	    		out += "<div onclick='giveBlueprint(" + itemList['blueprints'][i]['id'] + ")'>" + itemList['blueprints'][i]["name"] +  "</div><p>";
+	    	}
+	    }
+	    if (out == ""){
+	    	document.getElementById("blueprints").innerHTML = '';
+	    	return;
+	    }
+	    document.getElementById("blueprints").innerHTML = '';
+	    document.getElementById("blueprints").innerHTML = out;
+	}
+
+}
+
+document.getElementById('item').onkeypress=function(e){
+    if(e.keyCode==13){
+        document.getElementById('submit').click();
+    }
+}
+
+
+
+
+
+
+
+
