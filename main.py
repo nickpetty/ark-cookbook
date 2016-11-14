@@ -61,9 +61,12 @@ def getItems():
 
 @app.route('/giveItem')
 def giveItemRequest():
-	giveItem( itemID=request.args.get("id"), quantity=request.args.get("quantity") );
-
+	giveItem( itemID=request.args.get("id"), quantity=request.args.get("quantity"), player=request.args.get("player") );
 	return "", 200
+
+@app.route('/giveBlueprint')
+def givePlans():
+	giveBlueprint(blueprint=request.args.get("id"), quantity=request.args.get("quantity"), player=request.args.get("player") )
 
 @app.route('/enableCheats')
 def cheater():
@@ -103,9 +106,8 @@ def forceTame():
 def giveItem(itemID, quantity=1, quality=1,  forceBlueprint=0, player=1):
 	#itemID = findItemID(itemName)
 	launchConsole()
-	if player == 1:
+	if player == "1":
 		keys('admincheat GiveItemNum %s %s %s %s' % (itemID, quantity, quality, forceBlueprint))
-		print 'colled'
 	else:
 		playerID = findPlayerID(player)
 		if playerID == 0:
@@ -113,14 +115,38 @@ def giveItem(itemID, quantity=1, quality=1,  forceBlueprint=0, player=1):
 		else:
 			keys("admincheat giveitemnumtoplayer %s %s %s %s %s" % (playerID, itemID, quantity, quality, forceBlueprint))
 
+def giveBlueprint(blueprint, quantity=1, quality=1,  forceBlueprint=0, player=1):
+	#itemID = findItemID(itemName)
+	time.sleep(2)
+	if findBlueprintPath(blueprint) != False:
+		print "we got here"
+		blueprint = "\"" + findBlueprintPath(blueprint) + "\""
 
+		launchConsole()
+		if player == "1":
+			keys('admincheat GiveItem %s %s %s %s' % (blueprint, quantity, quality, forceBlueprint))
+		else:
+			playerID = findPlayerID(player)
+			if playerID == 0:
+				print "Player not found"
+			else:
+
+				keys("admincheat giveitemtoplayer %s %s %s %s %s" % (playerID, blueprint, quantity, quality, forceBlueprint))
 # Program Functions #
 
 def findItemID(item):
 	x = 0
 	while x < len(itemList["items"]):
 		if itemList["items"][x]["name"] == item:
-			return itemList["items"][x]["id"]
+			return  itemList["items"][x]["id"]
+		x += 1
+	return False
+
+def findBlueprintPath(name):
+	x = 0
+	while x < len(itemList["blueprints"]):
+		if itemList["blueprints"][x]["name"] == name:
+			return itemList["blueprints"][x]["id"]
 		x += 1
 
 def findPlayerID(playerName):
